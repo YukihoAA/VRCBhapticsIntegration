@@ -11,7 +11,7 @@ namespace VRCBhapticsIntegration
 		private bHaptics.PositionType Position = VRCBhaptics_Config.PositionArr[0];
 		private int Intensity = VRCBhaptics_Config.DefaultIntensity;
 		private byte[] Value = new byte[20];
-		private Color[] OldColors = null;
+		private Color[] OldColors;
 
 		public VRCBhaptics_CameraParser(IntPtr ptr) : base(ptr) { }
 
@@ -25,7 +25,7 @@ namespace VRCBhapticsIntegration
 				OldColors = null;
 		}
 
-		private Texture2D TempTexture = null;
+		private Texture2D TempTexture;
 		private Rect TempTextureRect = Rect.zero;
 		private void OnRenderImage(RenderTexture src, RenderTexture dest)
 		{
@@ -62,18 +62,22 @@ namespace VRCBhapticsIntegration
 						Value[colorpos] = (byte)Intensity;
 				}
 			Array.Reverse(Value, 0, pixelcolors.Length);
-			if (Position == bHaptics.PositionType.VestFront)
+			switch (Position)
 			{
-				Array.Reverse(Value, 0, 4);
-				Array.Reverse(Value, 4, 4);
-				Array.Reverse(Value, 8, 4);
-				Array.Reverse(Value, 12, 4);
-				Array.Reverse(Value, 16, 4);
+				case bHaptics.PositionType.VestFront:
+					Array.Reverse(Value, 0, 4);
+					Array.Reverse(Value, 4, 4);
+					Array.Reverse(Value, 8, 4);
+					Array.Reverse(Value, 12, 4);
+					Array.Reverse(Value, 16, 4);
+					break;
+				case bHaptics.PositionType.Head:
+					Array.Reverse(Value, 0, 6);
+					break;
+				case bHaptics.PositionType.FootR:
+					Array.Reverse(Value, 0, 3);
+					break;
 			}
-			else if (Position == bHaptics.PositionType.Head)
-				Array.Reverse(Value, 0, 6);
-			else if (Position == bHaptics.PositionType.FootR)
-				Array.Reverse(Value, 0, 3);
 			bHaptics.Submit(string.Concat("vrchat_", Position.ToString()), Position, Value, 100);
 		}
 	}
