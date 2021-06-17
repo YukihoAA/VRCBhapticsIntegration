@@ -9,9 +9,9 @@ namespace VRCBhapticsIntegration
     internal static class BuildInfo
     {
         public const string Name = "VRCBhapticsIntegration";
-        public const string Author = "Herp Derpinstine";
+        public const string Author = "Herp Derpinstine & benaclejames";
         public const string Company = "Lava Gang";
-        public const string Version = "1.0.4";
+        public const string Version = "1.0.5";
         public const string DownloadLink = "https://github.com/HerpDerpinstine/VRCBhapticsIntegration";
     }
 
@@ -38,10 +38,6 @@ namespace VRCBhapticsIntegration
 			if ((vrcAvatarManager == null) || (vrcAvatarManager != __instance))
 				return;
 			
-			__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 = (
-				(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 == null)
-				? new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)
-				: Il2CppSystem.Delegate.Combine(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0, (VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique)new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)).Cast<VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique>());
 			__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 = (
 				(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 == null)
 				? new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)
