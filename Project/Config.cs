@@ -7,19 +7,19 @@ namespace VRCBhapticsIntegration
 		internal static void Initialize()
 		{
 			Category = MelonPreferences.CreateCategory(BuildInfo.Name, BuildInfo.Name);
-			Allow_bHapticsPlayer_Communication = (MelonPreferences_Entry<bool>)Category.CreateEntry("Allow_bHapticsPlayer_Communication", true, "Allow bHapticsPlayer Communication");
+			Allow_bHapticsPlayer_Communication = Category.CreateEntry("Allow_bHapticsPlayer_Communication", true, "Allow bHapticsPlayer Communication");
 			Entries_Enable = new MelonPreferences_Entry<bool>[PositionArr.Length];
 			Entries_Intensity = new MelonPreferences_Entry<int>[PositionArr.Length];
 			for (int i = 0; i < PositionArr.Length; i++)
             {
 				string name = ProperNames[i];
-				string name_underscore = name.Replace(" ", "_");
-				Entries_Enable[i] = (MelonPreferences_Entry<bool>)Category.CreateEntry(("Enable_" + name_underscore), true, ("Enable " + name));
-				Entries_Intensity[i] = (MelonPreferences_Entry<int>)Category.CreateEntry((name_underscore + "_Intensity"), DefaultIntensity, (name + " Intensity"));
+				string nameUnderscore = name.Replace(" ", "_");
+				Entries_Enable[i] = Category.CreateEntry("Enable_" + nameUnderscore, true, "Enable " + name);
+				Entries_Intensity[i] = Category.CreateEntry(nameUnderscore + "_Intensity", DefaultIntensity, name + " Intensity");
 			}
 		}
 
-		internal static string[] ProperNames = new string[]
+		internal static string[] ProperNames =
 		{
 			"Head",
 			"Vest Front",
@@ -32,7 +32,7 @@ namespace VRCBhapticsIntegration
 			"Left Foot"
 		};
 
-		internal static string[] RenderTextureNames = new string[]
+		internal static string[] RenderTextureNames = 
 		{
 			"tactal_head",
 			"tactot_front",
@@ -45,7 +45,7 @@ namespace VRCBhapticsIntegration
 			"tactosy_foot_left"
 		};
 
-		internal static bHaptics.PositionType[] PositionArr = new bHaptics.PositionType[]
+		internal static bHaptics.PositionType[] PositionArr =
 		{
 			bHaptics.PositionType.Head,
 			bHaptics.PositionType.VestFront,
@@ -59,9 +59,9 @@ namespace VRCBhapticsIntegration
 		};
 
 		internal static int DefaultIntensity = 50;
-		private static MelonPreferences_Category Category = null;
-		internal static MelonPreferences_Entry<bool> Allow_bHapticsPlayer_Communication = null;
-		internal static MelonPreferences_Entry<bool>[] Entries_Enable = null;
-		internal static MelonPreferences_Entry<int>[] Entries_Intensity = null;
+		private static MelonPreferences_Category Category;
+		internal static MelonPreferences_Entry<bool> Allow_bHapticsPlayer_Communication;
+		internal static MelonPreferences_Entry<bool>[] Entries_Enable;
+		internal static MelonPreferences_Entry<int>[] Entries_Intensity;
 	}
 }

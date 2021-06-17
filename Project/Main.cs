@@ -3,7 +3,6 @@ using System.Reflection;
 using UnityEngine;
 using MelonLoader;
 using UnhollowerRuntimeLib;
-using Harmony;
 
 namespace VRCBhapticsIntegration
 {
@@ -25,8 +24,7 @@ namespace VRCBhapticsIntegration
 			CameraParsers = new VRCBhaptics_CameraParser[VRCBhaptics_Config.PositionArr.Length];
 			VRCBhaptics_Config.Initialize();
 			ClassInjector.RegisterTypeInIl2Cpp<VRCBhaptics_CameraParser>();
-			HarmonyInstance harmonyInstance = HarmonyInstance.Create("VRCBhapticsIntegration");
-			harmonyInstance.Patch(typeof(VRCAvatarManager).GetMethod("Awake", BindingFlags.Public | BindingFlags.Instance), null, new HarmonyMethod(typeof(VRCBhapticsIntegration).GetMethod("AwakePatch", BindingFlags.NonPublic | BindingFlags.Static)));
+			HarmonyInstance.Patch(typeof(VRCAvatarManager).GetMethod("Awake", BindingFlags.Public | BindingFlags.Instance), null, new HarmonyLib.HarmonyMethod(typeof(VRCBhapticsIntegration).GetMethod("AwakePatch", BindingFlags.NonPublic | BindingFlags.Static)));
 		}
 
 		public override void OnPreferencesSaved() { for (int i = 0; i < CameraParsers.Length; i++) { if (CameraParsers[i] == null) continue; CameraParsers[i].SetupFromConfig(i, true); } }
@@ -39,32 +37,33 @@ namespace VRCBhapticsIntegration
 			VRCAvatarManager vrcAvatarManager = vrcPlayer.prop_VRCAvatarManager_0;
 			if ((vrcAvatarManager == null) || (vrcAvatarManager != __instance))
 				return;
-			__instance.field_Internal_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 = (
-				(__instance.field_Internal_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 == null)
+			
+			__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 = (
+				(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 == null)
 				? new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)
-				: Il2CppSystem.Delegate.Combine(__instance.field_Internal_MulticastDelegateNPublicSealedVoGaVRBoUnique_0, (VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique)new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)).Cast<VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique>());
-			__instance.field_Internal_MulticastDelegateNPublicSealedVoGaVRBoUnique_1 = (
-				(__instance.field_Internal_MulticastDelegateNPublicSealedVoGaVRBoUnique_1 == null)
+				: Il2CppSystem.Delegate.Combine(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0, (VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique)new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)).Cast<VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique>());
+			__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 = (
+				(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0 == null)
 				? new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)
-				: Il2CppSystem.Delegate.Combine(__instance.field_Internal_MulticastDelegateNPublicSealedVoGaVRBoUnique_1, (VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique)new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)).Cast<VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique>());
+				: Il2CppSystem.Delegate.Combine(__instance.field_Private_MulticastDelegateNPublicSealedVoGaVRBoUnique_0, (VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique)new Action<GameObject, VRC.SDKBase.VRC_AvatarDescriptor, bool>(OnAvatarInstantiated)).Cast<VRCAvatarManager.MulticastDelegateNPublicSealedVoGaVRBoUnique>());
 		}
 
-		private static Camera[] TempCameraArray = null;
+		private static Camera[] TempCameraArray;
         private static void OnAvatarInstantiated(GameObject __0, VRC.SDKBase.VRC_AvatarDescriptor __1, bool __2)
         {
 			if ((__0 == null) || (__1 == null))
                 return;
 			for (int i = 0; i < CameraParsers.Length; i++)
 				CameraParsers[i] = null;
-			Camera[] foundcameras = __0.GetComponentsInChildren<Camera>(true);
-			if (foundcameras.Length <= 0)
+			Camera[] foundCameras = __0.GetComponentsInChildren<Camera>(true);
+			if (foundCameras.Length <= 0)
 				return;
 			if (TempCameraArray == null)
 				TempCameraArray = new Camera[CameraParsers.Length];
 			else
 				for (int i = 0; i < TempCameraArray.Length; i++)
 					TempCameraArray[i] = null;
-			foreach (Camera cam in foundcameras)
+			foreach (Camera cam in foundCameras)
 			{
 				RenderTexture tex = cam.targetTexture;
 				if (tex == null)
@@ -83,7 +82,7 @@ namespace VRCBhapticsIntegration
 					continue;
 				CameraParsers[i] = TempCameraArray[i].gameObject.AddComponent(Il2CppType.Of<VRCBhaptics_CameraParser>()).TryCast<VRCBhaptics_CameraParser>();
 				CameraParsers[i].SetupFromConfig(i);
-				MelonLogger.Msg(VRCBhaptics_Config.ProperNames[i].ToString() + " Linked!");
+				MelonLogger.Msg(VRCBhaptics_Config.ProperNames[i] + " Linked!");
 			}
 		}
 	}
