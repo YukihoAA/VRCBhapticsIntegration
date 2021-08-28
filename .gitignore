@@ -1,5 +1,11 @@
+Assets/VRCSDK*
 Library/
 Logs/
 Packages/
 ProjectSettings/
 Temp/
+*.sln
+*.csproj
+*.vsconfig
+*.vs
+*.cache
